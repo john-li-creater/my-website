@@ -29,7 +29,7 @@
           <div class="control-title">控制方式</div>
           <div class="control-item">WASD - 方向控制</div>
           <div class="control-item">方向键 - 方向控制</div>
-          <div class="control-item">点击虚拟按钮 - 移动端控制</div>
+          <div class="control-item">滑动手势 - 移动端控制</div>
           <div class="control-item">空格 - 暂停/开始</div>
           <div class="control-item">R - 重新开始</div>
         </div>
@@ -87,18 +87,6 @@
             重新开始
           </button>
         </div>
-        
-        <div class="direction-controls">
-          <div class="direction-pad">
-            <button @click="changeDirection({x: 0, y: -1})" class="direction-btn up">↑</button>
-            <div class="middle-row">
-              <button @click="changeDirection({x: -1, y: 0})" class="direction-btn left">←</button>
-              <div class="center-space"></div>
-              <button @click="changeDirection({x: 1, y: 0})" class="direction-btn right">→</button>
-            </div>
-            <button @click="changeDirection({x: 0, y: 1})" class="direction-btn down">↓</button>
-          </div>
-        </div>
       </div>
     </div>
   </div>
@@ -123,6 +111,11 @@ export default {
     const gameOver = ref(false)
     const paused = ref(false)
     const currentDifficulty = ref('normal')
+    
+    // 触摸控制相关
+    const touchStartX = ref(0)
+    const touchStartY = ref(0)
+    const MIN_SWIPE_DISTANCE = 30
 
     let gameInterval = null
 
@@ -271,6 +264,51 @@ export default {
           break
       }
     }
+    
+    // 触摸事件处理
+    const handleTouchStart = (event) => {
+      const touch = event.touches[0]
+      touchStartX.value = touch.clientX
+      touchStartY.value = touch.clientY
+    }
+
+    const handleTouchEnd = (event) => {
+      if (!gameStarted.value || gameOver.value || paused.value) return
+      
+      const touch = event.changedTouches[0]
+      const deltaX = touch.clientX - touchStartX.value
+      const deltaY = touch.clientY - touchStartY.value
+      
+      const absDeltaX = Math.abs(deltaX)
+      const absDeltaY = Math.abs(deltaY)
+      
+      // 检查是否达到最小滑动距离
+      if (absDeltaX < MIN_SWIPE_DISTANCE && absDeltaY < MIN_SWIPE_DISTANCE) {
+        return
+      }
+      
+      // 确定滑动方向
+      if (absDeltaX > absDeltaY) {
+        // 水平滑动
+        if (deltaX > 0) {
+          changeDirection({ x: 1, y: 0 })
+        } else {
+          changeDirection({ x: -1, y: 0 })
+        }
+      } else {
+        // 垂直滑动
+        if (deltaY > 0) {
+          changeDirection({ x: 0, y: 1 })
+        } else {
+          changeDirection({ x: 0, y: -1 })
+        }
+      }
+    }
+
+    // 防止默认触摸行为
+    const handleTouchMove = (event) => {
+      event.preventDefault()
+    }
 
     // 切换暂停
     const togglePause = () => {
@@ -330,6 +368,14 @@ export default {
       generateFood()
 
       document.addEventListener('keydown', handleKeyPress)
+      
+      // 添加触摸事件监听
+      const gameBoard = document.querySelector('.snake-grid')
+      if (gameBoard) {
+        gameBoard.addEventListener('touchstart', handleTouchStart, { passive: true })
+        gameBoard.addEventListener('touchend', handleTouchEnd, { passive: true })
+        gameBoard.addEventListener('touchmove', handleTouchMove, { passive: false })
+      }
     })
 
     onUnmounted(() => {
@@ -337,6 +383,14 @@ export default {
         clearInterval(gameInterval)
       }
       document.removeEventListener('keydown', handleKeyPress)
+      
+      // 移除触摸事件监听
+      const gameBoard = document.querySelector('.snake-grid')
+      if (gameBoard) {
+        gameBoard.removeEventListener('touchstart', handleTouchStart)
+        gameBoard.removeEventListener('touchend', handleTouchEnd)
+        gameBoard.removeEventListener('touchmove', handleTouchMove)
+      }
     })
 
     return {
@@ -676,51 +730,7 @@ export default {
   transform: scale(0.95);
 }
 
-.direction-controls {
-  display: flex;
-  justify-content: center;
-}
 
-.direction-pad {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-}
-
-.middle-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.direction-btn {
-  background: rgba(76, 175, 80, 0.2);
-  border: 2px solid #4caf50;
-  color: #4caf50;
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  font-size: 1.8em;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.direction-btn:active {
-  background: rgba(76, 175, 80, 0.4);
-  transform: scale(0.95);
-}
-
-.center-space {
-  width: 60px;
-  height: 60px;
-}
 
 @media (max-width: 768px) {
   .snake-container {

@@ -47,7 +47,7 @@
           <div class="control-item">A/D - 左右移动</div>
           <div class="control-item">S - 加速下降</div>
           <div class="control-item">W - 旋转</div>
-          <div class="control-item">点击虚拟按钮 - 移动端控制</div>
+          <div class="control-item">点击控制按钮 - 移动端控制</div>
           <div class="control-item">空格 - 暂停</div>
         </div>
       </div>
@@ -728,24 +728,24 @@ export default {
 /* 移动端控制 */
 .mobile-tetris-controls {
   display: none;
-  margin-top: 20px;
-  gap: 20px;
+  margin-top: 15px;
+  gap: 15px;
   flex-direction: column;
   align-items: center;
 }
 
 .game-actions {
   display: flex;
-  gap: 15px;
+  gap: 10px;
 }
 
 .action-btn {
   background: rgba(255, 107, 53, 0.2);
   border: 2px solid #ff6b35;
   color: #ff6b35;
-  padding: 12px 20px;
-  border-radius: 25px;
-  font-size: 14px;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 12px;
   font-weight: bold;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -762,13 +762,13 @@ export default {
 .tetris-controls {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
   align-items: center;
 }
 
 .control-row {
   display: flex;
-  gap: 10px;
+  gap: 8px;
   justify-content: center;
 }
 
@@ -776,10 +776,10 @@ export default {
   background: rgba(255, 107, 53, 0.2);
   border: 2px solid #ff6b35;
   color: #ff6b35;
-  width: 60px;
-  height: 50px;
-  border-radius: 10px;
-  font-size: 1.2em;
+  width: 50px;
+  height: 40px;
+  border-radius: 8px;
+  font-size: 1.1em;
   font-weight: bold;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -791,8 +791,8 @@ export default {
 }
 
 .tetris-btn.wide {
-  width: 130px;
-  font-size: 1em;
+  width: 108px;
+  font-size: 0.9em;
 }
 
 .tetris-btn:active {

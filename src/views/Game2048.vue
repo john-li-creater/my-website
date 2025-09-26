@@ -40,20 +40,7 @@
       <div class="controls">
         <button @click="resetGame" class="reset-btn">重新开始</button>
         <div class="instructions">
-          使用方向键 ↑↓←→ 或滑动手势控制游戏
-        </div>
-        
-        <!-- 移动端虚拟按钮 -->
-        <div class="mobile-controls">
-          <div class="direction-pad">
-            <button @click="move('up')" class="direction-btn up">↑</button>
-            <div class="middle-row">
-              <button @click="move('left')" class="direction-btn left">←</button>
-              <div class="center-space"></div>
-              <button @click="move('right')" class="direction-btn right">→</button>
-            </div>
-            <button @click="move('down')" class="direction-btn down">↓</button>
-          </div>
+          使用滑动手势控制游戏
         </div>
       </div>
       <div v-if="gameOver" class="game-over">
@@ -394,7 +381,8 @@ export default {
       isWin,
       resetGame,
       continueGame,
-      getCellClass
+      getCellClass,
+      move
     }
   }
 }
@@ -575,53 +563,7 @@ export default {
   opacity: 0.8;
 }
 
-/* 移动端虚拟按钮 */
-.mobile-controls {
-  display: none;
-  margin-top: 20px;
-}
 
-.direction-pad {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-}
-
-.middle-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.direction-btn {
-  background: rgba(255, 255, 255, 0.2);
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  color: white;
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  font-size: 1.8em;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  backdrop-filter: blur(10px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.direction-btn:active {
-  background: rgba(255, 255, 255, 0.4);
-  transform: scale(0.95);
-}
-
-.center-space {
-  width: 60px;
-  height: 60px;
-}
 
 .game-over, .win {
   position: fixed;
@@ -699,10 +641,7 @@ export default {
     padding: 6px 12px;
   }
   
-  /* 显示移动端控制 */
-  .mobile-controls {
-    display: block;
-  }
+
   
   .instructions {
     font-size: 0.9em;
