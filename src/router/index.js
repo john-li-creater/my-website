@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 import Home from '../views/Home.vue'
 import Game2048 from '../views/Game2048.vue'
 import Tetris from '../views/Tetris.vue'
@@ -28,7 +28,7 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHashHistory(), // 使用 hash 模式适配 GitHub Pages
   routes
 })
 
