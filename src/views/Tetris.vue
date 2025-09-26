@@ -47,6 +47,7 @@
           <div class="control-item">A/D - 左右移动</div>
           <div class="control-item">S - 加速下降</div>
           <div class="control-item">W - 旋转</div>
+          <div class="control-item">点击虚拟按钮 - 移动端控制</div>
           <div class="control-item">空格 - 暂停</div>
         </div>
       </div>
@@ -80,6 +81,29 @@
           <div class="pause-content">
             <h2>游戏暂停</h2>
             <p>按空格键继续</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 移动端控制按钮 -->
+      <div class="mobile-tetris-controls">
+        <div class="game-actions">
+          <button @click="togglePause" class="action-btn pause-btn">
+            {{ paused && !gameOver ? '继续' : '暂停' }}
+          </button>
+          <button @click="startGame" class="action-btn restart-btn">
+            重新开始
+          </button>
+        </div>
+        
+        <div class="tetris-controls">
+          <div class="control-row">
+            <button @click="movePiece(-1, 0)" class="tetris-btn move-btn">←</button>
+            <button @click="rotateCurrentPiece()" class="tetris-btn rotate-btn">↻</button>
+            <button @click="movePiece(1, 0)" class="tetris-btn move-btn">→</button>
+          </div>
+          <div class="control-row">
+            <button @click="dropPiece()" class="tetris-btn drop-btn wide">↓ 下降</button>
           </div>
         </div>
       </div>
@@ -439,7 +463,11 @@ export default {
       gameOver,
       paused,
       startGame,
-      getCellClass
+      getCellClass,
+      movePiece,
+      rotateCurrentPiece,
+      dropPiece,
+      togglePause
     }
   }
 }
@@ -697,6 +725,91 @@ export default {
   transform: translateY(-2px);
 }
 
+/* 移动端控制 */
+.mobile-tetris-controls {
+  display: none;
+  margin-top: 20px;
+  gap: 20px;
+  flex-direction: column;
+  align-items: center;
+}
+
+.game-actions {
+  display: flex;
+  gap: 15px;
+}
+
+.action-btn {
+  background: rgba(255, 107, 53, 0.2);
+  border: 2px solid #ff6b35;
+  color: #ff6b35;
+  padding: 12px 20px;
+  border-radius: 25px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Courier New', monospace;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.action-btn:active {
+  background: rgba(255, 107, 53, 0.4);
+  transform: scale(0.95);
+}
+
+.tetris-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+}
+
+.control-row {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.tetris-btn {
+  background: rgba(255, 107, 53, 0.2);
+  border: 2px solid #ff6b35;
+  color: #ff6b35;
+  width: 60px;
+  height: 50px;
+  border-radius: 10px;
+  font-size: 1.2em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tetris-btn.wide {
+  width: 130px;
+  font-size: 1em;
+}
+
+.tetris-btn:active {
+  background: rgba(255, 107, 53, 0.4);
+  transform: scale(0.95);
+}
+
+.rotate-btn {
+  background: rgba(255, 165, 0, 0.2);
+  border-color: #ffa500;
+  color: #ffa500;
+}
+
+.rotate-btn:active {
+  background: rgba(255, 165, 0, 0.4);
+}
+
 @media (max-width: 768px) {
   .tetris-container {
     flex-direction: column;
@@ -712,6 +825,34 @@ export default {
   .tetris-cell {
     width: 20px;
     height: 20px;
+  }
+  
+  /* 显示移动端控制 */
+  .mobile-tetris-controls {
+    display: flex;
+    order: 3;
+  }
+  
+  .tetris-page {
+    padding: 10px;
+  }
+  
+  .game-header .game-title {
+    font-size: 1.5rem;
+  }
+  
+  .back-btn {
+    font-size: 12px;
+    padding: 6px 12px;
+  }
+  
+  .tetris-container {
+    margin-top: 70px;
+    gap: 20px;
+  }
+  
+  .game-board {
+    margin-bottom: 0;
   }
 }
 </style>

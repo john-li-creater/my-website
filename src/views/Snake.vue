@@ -29,6 +29,7 @@
           <div class="control-title">控制方式</div>
           <div class="control-item">WASD - 方向控制</div>
           <div class="control-item">方向键 - 方向控制</div>
+          <div class="control-item">点击虚拟按钮 - 移动端控制</div>
           <div class="control-item">空格 - 暂停/开始</div>
           <div class="control-item">R - 重新开始</div>
         </div>
@@ -72,6 +73,30 @@
           <div class="pause-content">
             <h2>游戏暂停</h2>
             <p>按空格键继续</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 移动端控制按钮 -->
+      <div class="mobile-game-controls">
+        <div class="game-buttons">
+          <button @click="togglePause" class="control-btn pause-btn">
+            {{ paused && gameStarted && !gameOver ? '继续' : '暂停' }}
+          </button>
+          <button @click="startGame" class="control-btn restart-btn">
+            重新开始
+          </button>
+        </div>
+        
+        <div class="direction-controls">
+          <div class="direction-pad">
+            <button @click="changeDirection({x: 0, y: -1})" class="direction-btn up">↑</button>
+            <div class="middle-row">
+              <button @click="changeDirection({x: -1, y: 0})" class="direction-btn left">←</button>
+              <div class="center-space"></div>
+              <button @click="changeDirection({x: 1, y: 0})" class="direction-btn right">→</button>
+            </div>
+            <button @click="changeDirection({x: 0, y: 1})" class="direction-btn down">↓</button>
           </div>
         </div>
       </div>
@@ -327,7 +352,9 @@ export default {
       difficulties,
       startGame,
       setDifficulty,
-      getCellClass
+      getCellClass,
+      changeDirection,
+      togglePause
     }
   }
 }
@@ -615,6 +642,86 @@ export default {
   transform: translateY(-2px);
 }
 
+/* 移动端控制 */
+.mobile-game-controls {
+  display: none;
+  margin-top: 20px;
+  gap: 20px;
+  flex-direction: column;
+  align-items: center;
+}
+
+.game-buttons {
+  display: flex;
+  gap: 15px;
+}
+
+.control-btn {
+  background: rgba(76, 175, 80, 0.2);
+  border: 2px solid #4caf50;
+  color: #4caf50;
+  padding: 12px 20px;
+  border-radius: 25px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Courier New', monospace;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.control-btn:active {
+  background: rgba(76, 175, 80, 0.4);
+  transform: scale(0.95);
+}
+
+.direction-controls {
+  display: flex;
+  justify-content: center;
+}
+
+.direction-pad {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.middle-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.direction-btn {
+  background: rgba(76, 175, 80, 0.2);
+  border: 2px solid #4caf50;
+  color: #4caf50;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  font-size: 1.8em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.direction-btn:active {
+  background: rgba(76, 175, 80, 0.4);
+  transform: scale(0.95);
+}
+
+.center-space {
+  width: 60px;
+  height: 60px;
+}
+
 @media (max-width: 768px) {
   .snake-container {
     flex-direction: column;
@@ -634,6 +741,30 @@ export default {
 
   .difficulty-selector {
     text-align: center;
+  }
+  
+  /* 显示移动端控制 */
+  .mobile-game-controls {
+    display: flex;
+    order: 3;
+  }
+  
+  .snake-page {
+    padding: 10px;
+  }
+  
+  .game-header .game-title {
+    font-size: 1.5rem;
+  }
+  
+  .back-btn {
+    font-size: 12px;
+    padding: 6px 12px;
+  }
+  
+  .snake-container {
+    margin-top: 70px;
+    gap: 20px;
   }
 }
 </style>

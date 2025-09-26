@@ -690,5 +690,103 @@ export default {
   .main-container {
     padding: 20px 15px;
   }
+  
+  .game-card {
+    padding: 20px;
+  }
+  
+  .card-icon {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .number-grid {
+    width: 35px;
+    height: 35px;
+  }
+  
+  .mini-cell {
+    font-size: 8px;
+  }
+  
+  .tetris-icon {
+    width: 35px;
+    height: 35px;
+  }
+  
+  .snake-icon {
+    width: 35px;
+    height: 35px;
+  }
+  
+  .snake-segment {
+    width: 25px;
+    height: 5px;
+  }
+  
+  .snake-segment.head {
+    width: 30px;
+  }
+  
+  .game-title {
+    font-size: 1.5rem;
+  }
+  
+  .game-description {
+    font-size: 13px;
+  }
+  
+  .play-btn {
+    padding: 10px 25px;
+    font-size: 14px;
+  }
+  
+  .subtitle {
+    font-size: 1rem;
+  }
+  
+  .title-section {
+    margin-bottom: 40px;
+  }
+  
+  .footer-info {
+    margin-top: 40px;
+  }
+  
+  /* 优化手机点击体验 */
+  .game-card {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+  
+  .play-btn {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+}
+
+@media (max-width: 480px) {
+  .cyber-title,
+  .glitch {
+    font-size: 2rem;
+    letter-spacing: 0.1rem;
+  }
+  
+  .main-container {
+    padding: 15px 10px;
+  }
+  
+  .game-card {
+    padding: 15px;
+    margin: 0 5px;
+  }
+  
+  .games-grid {
+    gap: 15px;
+  }
+  
+  .bg-animation {
+    opacity: 0.3; /* 减少背景动画在小屏幕上的干扰 */
+  }
 }
 </style>

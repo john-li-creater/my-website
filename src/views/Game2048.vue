@@ -40,7 +40,20 @@
       <div class="controls">
         <button @click="resetGame" class="reset-btn">重新开始</button>
         <div class="instructions">
-          使用方向键 ↑↓←→ 控制游戏
+          使用方向键 ↑↓←→ 或滑动手势控制游戏
+        </div>
+        
+        <!-- 移动端虚拟按钮 -->
+        <div class="mobile-controls">
+          <div class="direction-pad">
+            <button @click="move('up')" class="direction-btn up">↑</button>
+            <div class="middle-row">
+              <button @click="move('left')" class="direction-btn left">←</button>
+              <div class="center-space"></div>
+              <button @click="move('right')" class="direction-btn right">→</button>
+            </div>
+            <button @click="move('down')" class="direction-btn down">↓</button>
+          </div>
         </div>
       </div>
       <div v-if="gameOver" class="game-over">
@@ -74,6 +87,11 @@ export default {
     const gameOver = ref(false)
     const isWin = ref(false)
     const hasWon = ref(false)
+    
+    // 触摸控制相关
+    const touchStartX = ref(0)
+    const touchStartY = ref(0)
+    const MIN_SWIPE_DISTANCE = 50
 
     // 初始化游戏网格
     const initGrid = () => {
@@ -281,6 +299,51 @@ export default {
       addRandomNumber()
     }
 
+    // 触摸事件处理
+    const handleTouchStart = (event) => {
+      const touch = event.touches[0]
+      touchStartX.value = touch.clientX
+      touchStartY.value = touch.clientY
+    }
+
+    const handleTouchEnd = (event) => {
+      if (gameOver.value) return
+      
+      const touch = event.changedTouches[0]
+      const deltaX = touch.clientX - touchStartX.value
+      const deltaY = touch.clientY - touchStartY.value
+      
+      const absDeltaX = Math.abs(deltaX)
+      const absDeltaY = Math.abs(deltaY)
+      
+      // 检查是否达到最小滑动距离
+      if (absDeltaX < MIN_SWIPE_DISTANCE && absDeltaY < MIN_SWIPE_DISTANCE) {
+        return
+      }
+      
+      // 确定滑动方向
+      if (absDeltaX > absDeltaY) {
+        // 水平滑动
+        if (deltaX > 0) {
+          move('right')
+        } else {
+          move('left')
+        }
+      } else {
+        // 垂直滑动
+        if (deltaY > 0) {
+          move('down')
+        } else {
+          move('up')
+        }
+      }
+    }
+
+    // 防止默认触摸行为
+    const handleTouchMove = (event) => {
+      event.preventDefault()
+    }
+
     // 继续游戏
     const continueGame = () => {
       isWin.value = false
@@ -301,10 +364,26 @@ export default {
       
       resetGame()
       document.addEventListener('keydown', handleKeyPress)
+      
+      // 添加触摸事件监听
+      const gameContainer = document.querySelector('.game-container')
+      if (gameContainer) {
+        gameContainer.addEventListener('touchstart', handleTouchStart, { passive: true })
+        gameContainer.addEventListener('touchend', handleTouchEnd, { passive: true })
+        gameContainer.addEventListener('touchmove', handleTouchMove, { passive: false })
+      }
     })
 
     onUnmounted(() => {
       document.removeEventListener('keydown', handleKeyPress)
+      
+      // 移除触摸事件监听
+      const gameContainer = document.querySelector('.game-container')
+      if (gameContainer) {
+        gameContainer.removeEventListener('touchstart', handleTouchStart)
+        gameContainer.removeEventListener('touchend', handleTouchEnd)
+        gameContainer.removeEventListener('touchmove', handleTouchMove)
+      }
     })
 
     return {
@@ -496,6 +575,54 @@ export default {
   opacity: 0.8;
 }
 
+/* 移动端虚拟按钮 */
+.mobile-controls {
+  display: none;
+  margin-top: 20px;
+}
+
+.direction-pad {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.middle-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.direction-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  font-size: 1.8em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.direction-btn:active {
+  background: rgba(255, 255, 255, 0.4);
+  transform: scale(0.95);
+}
+
+.center-space {
+  width: 60px;
+  height: 60px;
+}
+
 .game-over, .win {
   position: fixed;
   top: 0;
@@ -570,6 +697,36 @@ export default {
   .back-btn {
     font-size: 12px;
     padding: 6px 12px;
+  }
+  
+  /* 显示移动端控制 */
+  .mobile-controls {
+    display: block;
+  }
+  
+  .instructions {
+    font-size: 0.9em;
+  }
+  
+  .game-container {
+    margin-bottom: 20px;
+  }
+  
+  .app {
+    padding: 10px;
+  }
+  
+  .score-container {
+    gap: 15px;
+    margin-bottom: 20px;
+  }
+  
+  .score, .best-score {
+    padding: 10px 20px;
+  }
+  
+  .score-value {
+    font-size: 1.5em;
   }
 }
 </style>
