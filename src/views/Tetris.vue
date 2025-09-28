@@ -9,6 +9,28 @@
     </div>
     
     <div class="tetris-container">
+      <!-- 移动端控制按钮 -->
+      <div class="mobile-tetris-controls">
+        <div class="tetris-controls">
+          <div class="control-row">
+            <button @click="movePiece(-1, 0)" class="tetris-btn move-btn">←</button>
+            <button @click="rotateCurrentPiece()" class="tetris-btn rotate-btn">↻</button>
+            <button @click="movePiece(1, 0)" class="tetris-btn move-btn">→</button>
+          </div>
+          <div class="control-row">
+            <button @click="dropPiece()" class="tetris-btn drop-btn wide">↓</button>
+          </div>
+          <div class="control-row">
+            <button @click="togglePause" class="action-btn pause-btn">
+              {{ paused && !gameOver ? '继续' : '暂停' }}
+            </button>
+            <button @click="startGame" class="action-btn restart-btn">
+              重新开始
+            </button>
+          </div>
+        </div>
+      </div>
+
       <div class="game-info">
         <div class="score-board">
           <div class="score-item">
@@ -25,7 +47,28 @@
           </div>
         </div>
         
-        <div class="next-piece">
+        <div class="next-piece desktop-only">
+          <div class="label">下一个</div>
+          <div class="preview-grid">
+            <div 
+              v-for="(row, rowIndex) in nextPieceGrid" 
+              :key="rowIndex" 
+              class="preview-row"
+            >
+              <div 
+                v-for="(cell, colIndex) in row" 
+                :key="colIndex" 
+                class="preview-cell"
+                :class="{ filled: cell }"
+              ></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="game-board">
+        <!-- 右上角下一个方块提示 -->
+        <div class="next-piece-corner mobile-only">
           <div class="label">下一个</div>
           <div class="preview-grid">
             <div 
@@ -43,16 +86,6 @@
           </div>
         </div>
         
-        <div class="controls-info">
-          <div class="control-item">A/D - 左右移动</div>
-          <div class="control-item">S - 加速下降</div>
-          <div class="control-item">W - 旋转</div>
-          <div class="control-item">点击控制按钮 - 移动端控制</div>
-          <div class="control-item">空格 - 暂停</div>
-        </div>
-      </div>
-      
-      <div class="game-board">
         <div class="tetris-grid">
           <div 
             v-for="(row, rowIndex) in gameBoard" 
@@ -80,30 +113,7 @@
         <div v-if="paused && !gameOver" class="pause-overlay">
           <div class="pause-content">
             <h2>游戏暂停</h2>
-            <p>按空格键继续</p>
-          </div>
-        </div>
-      </div>
-      
-      <!-- 移动端控制按钮 -->
-      <div class="mobile-tetris-controls">
-        <div class="game-actions">
-          <button @click="togglePause" class="action-btn pause-btn">
-            {{ paused && !gameOver ? '继续' : '暂停' }}
-          </button>
-          <button @click="startGame" class="action-btn restart-btn">
-            重新开始
-          </button>
-        </div>
-        
-        <div class="tetris-controls">
-          <div class="control-row">
-            <button @click="movePiece(-1, 0)" class="tetris-btn move-btn">←</button>
-            <button @click="rotateCurrentPiece()" class="tetris-btn rotate-btn">↻</button>
-            <button @click="movePiece(1, 0)" class="tetris-btn move-btn">→</button>
-          </div>
-          <div class="control-row">
-            <button @click="dropPiece()" class="tetris-btn drop-btn wide">↓ 下降</button>
+            <p>点击继续按钮恢复游戏</p>
           </div>
         </div>
       </div>
@@ -595,6 +605,31 @@ export default {
   font-size: 14px;
 }
 
+/* 右上角下一个方块提示 */
+.next-piece-corner {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.8);
+  border-radius: 8px;
+  padding: 8px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 107, 53, 0.5);
+  z-index: 10;
+  min-width: 60px;
+}
+
+.next-piece-corner .label {
+  margin-bottom: 5px;
+  color: #ff6b35;
+  font-size: 10px;
+  font-weight: bold;
+}
+
+.mobile-only {
+  display: none;
+}
+
 .preview-grid {
   display: flex;
   flex-direction: column;
@@ -617,6 +652,31 @@ export default {
 .preview-cell.filled {
   background: #ff6b35;
   box-shadow: 0 0 5px rgba(255, 107, 53, 0.5);
+}
+
+/* 右上角预览网格的小尺寸样式 */
+.next-piece-corner .preview-cell {
+  width: 12px;
+  height: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 1px;
+}
+
+.next-piece-corner .preview-cell.filled {
+  background: #ff6b35;
+  box-shadow: 0 0 3px rgba(255, 107, 53, 0.5);
+}
+
+.next-piece-corner .preview-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.next-piece-corner .preview-row {
+  display: flex;
+  gap: 1px;
+  justify-content: center;
 }
 
 .controls-info {
@@ -727,16 +787,26 @@ export default {
 
 /* 移动端控制 */
 .mobile-tetris-controls {
-  display: none;
-  margin-top: 15px;
+  display: flex;
+  margin-bottom: 20px;
   gap: 15px;
   flex-direction: column;
   align-items: center;
+  order: 2; /* 控制按钮放第二个 */
 }
 
-.game-actions {
-  display: flex;
-  gap: 10px;
+.desktop-only {
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .desktop-only {
+    display: none;
+  }
+  
+  .mobile-only {
+    display: block;
+  }
 }
 
 .action-btn {
@@ -744,7 +814,7 @@ export default {
   border: 2px solid #ff6b35;
   color: #ff6b35;
   padding: 8px 16px;
-  border-radius: 20px;
+  border-radius: 8px;
   font-size: 12px;
   font-weight: bold;
   cursor: pointer;
@@ -752,6 +822,11 @@ export default {
   font-family: 'Courier New', monospace;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
+  width: 80px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .action-btn:active {
@@ -817,20 +892,24 @@ export default {
   }
   
   .game-info {
-    order: 2;
+    order: 3; /* 放在最后 */
     width: 100%;
     max-width: 300px;
+  }
+  
+  .game-board {
+    order: 1; /* 游戏区域放第一个 */
+  }
+  
+  .mobile-tetris-controls {
+    order: 2; /* 控制按钮放第二个 */
+    width: 100%;
+    max-width: 400px;
   }
   
   .tetris-cell {
     width: 20px;
     height: 20px;
-  }
-  
-  /* 显示移动端控制 */
-  .mobile-tetris-controls {
-    display: flex;
-    order: 3;
   }
   
   .tetris-page {
@@ -853,6 +932,14 @@ export default {
   
   .game-board {
     margin-bottom: 0;
+  }
+  
+  .desktop-only {
+    display: none;
+  }
+  
+  .mobile-only {
+    display: block;
   }
 }
 </style>

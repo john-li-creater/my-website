@@ -3,6 +3,8 @@ import Home from '../views/Home.vue'
 import Game2048 from '../views/Game2048.vue'
 import Tetris from '../views/Tetris.vue'
 import Snake from '../views/Snake.vue'
+import TapTheDot from '../views/TapTheDot.vue'
+import CatWhackMole from '../views/CatWhackMole.vue'
 
 const routes = [
   {
@@ -24,6 +26,16 @@ const routes = [
     path: '/game/snake',
     name: 'Snake',
     component: Snake
+  },
+  {
+    path: '/game/tap-the-dot',
+    name: 'TapTheDot',
+    component: TapTheDot
+  },
+  {
+    path: '/game/cat-whack-mole',
+    name: 'CatWhackMole',
+    component: CatWhackMole
   }
 ]
 

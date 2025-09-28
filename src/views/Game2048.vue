@@ -40,7 +40,7 @@
       <div class="controls">
         <button @click="resetGame" class="reset-btn">重新开始</button>
         <div class="instructions">
-          使用滑动手势控制游戏
+          使用滑动手势
         </div>
       </div>
       <div v-if="gameOver" class="game-over">

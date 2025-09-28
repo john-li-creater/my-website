@@ -15,7 +15,7 @@
         <h1 class="cyber-title">
           <span class="glitch" data-text="CYBER GAMES">CYBER GAMES</span>
         </h1>
-        <p class="subtitle">// 进入数字赛博世界 //</p>
+        <p class="subtitle">// play game //</p>
       </div>
 
       <!-- 游戏卡片 -->
@@ -143,6 +143,87 @@
           </div>
           <div class="card-glow"></div>
         </div>
+
+        <div class="game-card" @click="navigateToGame('tap-the-dot')">
+          <div class="card-header">
+            <div class="card-icon">
+              <div class="dot-icon">
+                <div class="main-dot"></div>
+                <div class="ring ring-1"></div>
+                <div class="ring ring-2"></div>
+              </div>
+            </div>
+            <div class="card-status">
+              <span class="status-dot online"></span>
+              <span class="status-text">ONLINE</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <h3 class="game-title">点点乐</h3>
+            <p class="game-description">
+              触屏反应游戏<br/>
+              快速点击出现的圆点
+            </p>
+            <div class="game-stats">
+              <div class="stat">
+                <span class="stat-label">难度</span>
+                <span class="stat-value">★★★☆☆</span>
+              </div>
+              <div class="stat">
+                <span class="stat-label">类型</span>
+                <span class="stat-value">反应</span>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer">
+            <button class="play-btn">
+              <span class="btn-text">启动游戏</span>
+              <span class="btn-arrow">></span>
+            </button>
+          </div>
+          <div class="card-glow"></div>
+        </div>
+
+        <div class="game-card" @click="navigateToGame('cat-whack-mole')">
+          <div class="card-header">
+            <div class="card-icon">
+              <div class="mole-icon">
+                <div class="mole-body"></div>
+                <div class="cat-paw">🐾</div>
+                <div class="sparkle sparkle-1">✨</div>
+                <div class="sparkle sparkle-2">⭐</div>
+              </div>
+            </div>
+            <div class="card-status">
+              <span class="status-dot online"></span>
+              <span class="status-text">ONLINE</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <h3 class="game-title">🐱 年年打地鼠</h3>
+            <p class="game-description">
+              可爱的打地鼠游戏<br/>
+              专为年年设计的大按钮
+            </p>
+            <div class="game-stats">
+              <div class="stat">
+                <span class="stat-label">难度</span>
+                <span class="stat-value">★★☆☆☆</span>
+              </div>
+              <div class="stat">
+                <span class="stat-label">类型</span>
+                <span class="stat-value">休闲</span>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer">
+            <button class="play-btn">
+              <span class="btn-text">启动游戏</span>
+              <span class="btn-arrow">></span>
+            </button>
+          </div>
+          <div class="card-glow"></div>
+        </div>
       </div>
 
       <!-- 底部信息 -->
@@ -195,6 +276,10 @@ export default {
         router.push('/game/tetris')
       } else if (gameType === 'snake') {
         router.push('/game/snake')
+      } else if (gameType === 'tap-the-dot') {
+        router.push('/game/tap-the-dot')
+      } else if (gameType === 'cat-whack-mole') {
+        router.push('/game/cat-whack-mole')
       }
     }
 
@@ -524,6 +609,134 @@ export default {
   position: absolute;
   top: 10px;
   right: 10px;
+}
+
+.dot-icon {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.main-dot {
+  width: 16px;
+  height: 16px;
+  background: #3b82f6;
+  border-radius: 50%;
+  position: relative;
+  z-index: 3;
+}
+
+.ring {
+  position: absolute;
+  border: 2px solid;
+  border-radius: 50%;
+  animation: pulse-ring 2s ease-out infinite;
+}
+
+.ring-1 {
+  width: 24px;
+  height: 24px;
+  border-color: rgba(59, 130, 246, 0.5);
+  animation-delay: 0s;
+}
+
+.ring-2 {
+  width: 32px;
+  height: 32px;
+  border-color: rgba(6, 182, 212, 0.3);
+  animation-delay: 0.5s;
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.8);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.2);
+    opacity: 0;
+  }
+}
+
+.mole-icon {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mole-body {
+  width: 20px;
+  height: 20px;
+  background: linear-gradient(145deg, #8b4513, #a0522d);
+  border-radius: 50%;
+  position: relative;
+  z-index: 2;
+}
+
+.mole-body::before {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 3px;
+  height: 3px;
+  background: #000;
+  border-radius: 50%;
+}
+
+.mole-body::after {
+  content: '';
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 3px;
+  height: 3px;
+  background: #000;
+  border-radius: 50%;
+}
+
+.cat-paw {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  font-size: 16px;
+  animation: paw-wave 1.5s ease-in-out infinite;
+  z-index: 3;
+}
+
+@keyframes paw-wave {
+  0%, 100% { transform: rotate(0deg) scale(1); }
+  25% { transform: rotate(-15deg) scale(1.1); }
+  75% { transform: rotate(15deg) scale(1.1); }
+}
+
+.sparkle {
+  position: absolute;
+  font-size: 12px;
+  animation: sparkle-twinkle 2s ease-in-out infinite;
+}
+
+.sparkle-1 {
+  top: -2px;
+  left: -2px;
+  animation-delay: 0s;
+}
+
+.sparkle-2 {
+  bottom: -2px;
+  right: -2px;
+  animation-delay: 1s;
+}
+
+@keyframes sparkle-twinkle {
+  0%, 100% { opacity: 0; transform: scale(0); }
+  50% { opacity: 1; transform: scale(1); }
 }
 
 .card-status {
