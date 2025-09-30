@@ -8,7 +8,7 @@ export default defineConfig({
   base: '/my-website/',
   build: {
     // 直接输出到 docs，便于 GitHub Pages 选择 /docs 目录发布
-    outDir: 'docs',
+    outDir: 'dist',
     assetsDir: 'assets'
   }
 })
