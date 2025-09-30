@@ -23,15 +23,23 @@ jobs:
           cache: npm
 
       - name: Install dependencies
-        run: npm install   # 如果你有 package-lock.json，用 npm ci 也行
+        run: npm ci  # 推荐用 ci（更稳定）
 
       - name: Build
         run: npm run build
 
+      - name: Check build output
+        run: |
+          ls -la
+          if [ ! -d "dist" ]; then
+            echo "❌ Build failed: dist directory not found!"
+            exit 1
+          fi
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./dist   # Vite 默认输出目录
+          path: dist  # ✅ 不加 ./
 
   deploy:
     environment:
